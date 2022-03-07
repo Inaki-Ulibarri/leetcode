@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <tgmath.h>
 
 bool isValid(char *s);
 bool isCloser(char op, char cl);
@@ -20,39 +19,49 @@ bool isOpener(char op);
 
 int main()
     {
-    char *str1 = "()"; //valid
-    char *str2 = "()[]{}";
+    char *str1 = "()"; 
+    char *str2 = "(({}[()[]]))";
     char *str3 = "(]";
-    
+    char *str4 = "([]){";
+    char *str5 = "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[";
+
     isValid(str1) ?
 	printf("%s is valid\n", str1) : printf("%s is not valid\n", str1);
     isValid(str2) ?
 	printf("%s is valid\n", str2) : printf("%s is not valid\n", str2);
     isValid(str3) ?
 	printf("%s is valid\n", str3) : printf("%s is not valid\n", str3);
+    isValid(str4) ?
+	printf("%s is valid\n", str4) : printf("%s is not valid\n", str4);
+    isValid(str5) ?
+	printf("%s is valid\n", str5) : printf("%s is not valid\n", str5);
 
     return (0);
     }
 
 bool isValid(char *s)
     {
-    int const leng = strlen(s);
+    int const leng = strlen(s)+1;
     char str[leng];
     strcpy(str, s);
     //avoid WPB (weird pointer bs)
-    char nested
-	[(int) ((ceil(leng)/2)+1)];
-    //only need to house half of the parenthesis
-    //at a time
+    char *nested = calloc(leng, sizeof(char));
+    //don't try to half it, results in WPB
     size_t nest_pos = 0;
     bool ret = false;
     
-    for (size_t pos = 0; pos < leng;++pos)
+    for (int pos = 0; pos < leng && str[pos];++pos)
 	{
 	if(isOpener(str[pos]))
 	    {
 	    nested[nest_pos] = str[pos];
 	    ++nest_pos;
+	    }
+	else if (!(isOpener(str[pos])) &&
+	    (nest_pos == 0))
+	    {
+	    ret = false;
+	    break;
 	    }
 	else
 	    {
@@ -81,6 +90,11 @@ bool isValid(char *s)
 		}
 	    }
 	}
+    if (nested[0] != 0)
+	ret = false;
+    //check for openers on the last place
+
+    free(nested);
     return (ret);
     }
 
