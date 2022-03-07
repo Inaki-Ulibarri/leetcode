@@ -22,7 +22,7 @@ int main()
     char *str1 = "()"; 
     char *str2 = "(({}[()[]]))";
     char *str3 = "(]";
-    char *str4 = "([]){";
+    char *str4 = "([]){}[(";
     char *str5 = "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[";
 
     isValid(str1) ?
@@ -56,6 +56,7 @@ bool isValid(char *s)
 	    {
 	    nested[nest_pos] = str[pos];
 	    ++nest_pos;
+	    ret = false;
 	    }
 	else if (!(isOpener(str[pos])) &&
 	    (nest_pos == 0))
@@ -78,7 +79,7 @@ bool isValid(char *s)
 		    }
 		else
 		    {
-		    fprintf(stderr, "nest_pos out of bounds error, trying to write "
+		    fprintf(stderr, "Error: nest_pos out of bounds error, trying to write "
 			"under the stack\n");
 		    exit (1);
 		    }		
@@ -90,9 +91,6 @@ bool isValid(char *s)
 		}
 	    }
 	}
-    if (nested[0] != 0)
-	ret = false;
-    //check for openers on the last place
 
     free(nested);
     return (ret);
