@@ -2,3 +2,12 @@
 #+Author: Iñaki Ulibarri Utrilla
 
 Series of of leetcode projects, you're beyond welcome to copy my homework :D.
+
+* Projects so far:
+
+  + isPalindrome
+  + validParenthesis
+  + twoSum
+  + removeDuplicates
+    + two implementation
+    + '1' works, but is O(n**2), '2' doesn't but it's O(n)
