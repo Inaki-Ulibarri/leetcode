@@ -20,9 +20,6 @@
 #define ARRSZ(a) (sizeof(a)/sizeof(a[0]))
 int removeDuplicates(int *arr, int size);
 
-/**
- * TODO: fix the break sequence in removeDuplicates()
- */
 int main()
 {
 	int arr[] = {1,2,2};
@@ -34,40 +31,15 @@ int main()
 	return (0);
 }
 
-int nextHigh(int *arr, int size, int ind)
+//solution from https://leetcode.com/problems/remove-duplicates-from-sorted-array/discuss/449156/C-solution, fucking kill me already
+int removeDuplicates(int* nums, int numsSize)
 {
-	for(int i = ind; i < size-1; ++i) {
-		if (arr[i] < arr[i+1])
-			return (i+1);
+	int dups = 0;
+	for (int i = 1; i < numsSize; ++i) {
+		if (nums[i-1] < nums[i]) 
+			nums[i-dups] = nums[i];
+		else
+			++dups;
 	}
-	return (-1);
+	return (numsSize-dups);
 }
-
-int arraySame(int *arr, int size)
-{
-	int ret = 1;
-	for (int i = 0; i < size-1; ++i) {
-		if (arr[i] != arr[i+1]) {
-			ret = 0;
-			break;
-		}
-	}
-	return (ret);
-}
-
-int removeDuplicates(int *arr, int size)
-{
-	int p = 1;
-	int res = 1;
-	for (int i = 1; i < size-1; ++i) {
-	        p = nextHigh(arr, size, p);
-		if (p == -1) {
-			return (i);
-		}
-		arr[i] = arr[p];
-		++res;
-	}
-	return (res);
-}
-
-// 1 2 3 4 5 5 5 6 7 8
